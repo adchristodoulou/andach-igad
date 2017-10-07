@@ -62,8 +62,35 @@ class IGAD
         $apiData = $this->apiGet($apiUrl);
         return $this->decode($apiData);
     }
+
+    public function getConversations()
+    {
+        $apiUrl = $this->getEndpoint('conversations');
+        $apiData = $this->apiGet($apiUrl);
+        return $this->decode($apiData);
+    }
+
+    public function getGameDetails($titleid)
+    {
+        $apiUrl = $this->getEndpoint('/game-details-hex/'.dechex($titleid));
+        $apiData = $this->apiGet($apiUrl);
+        return $this->decode($apiData);
+    }
+
+    public function getGamertag($xuid)
+    {
+        $apiUrl = $this->getEndpoint('gamertag/'.$xuid);
+        return $this->apiGet($apiUrl);
+    }
+
+    public function getMessages()
+    {
+        $apiUrl = $this->getEndpoint('messages');
+        $apiData = $this->apiGet($apiUrl);
+        return $this->decode($apiData);
+    }
     
-    public function getProfile($xuid = '')
+    public function getMyProfile($xuid = '')
     {
         if ($xuid)
         {
@@ -75,6 +102,44 @@ class IGAD
         $apiData = $this->apiGet($apiUrl);
         return $this->decode($apiData);
     }
+
+    public function getUserInfo($xuid, $info)
+    {
+        switch ($info)
+        {
+            case 'profile':
+            case 'gamercard':
+            case 'presence':
+            case 'activity':
+            case 'xbox360games':
+            case 'xboxonegames':
+            case 'friends':
+                $url = $info;
+            break;
+
+            case 'recentactivity':
+                $url = '/activity/recent';
+            break;
+
+            default:
+                throw new \Exception('The info type of '.$info.' is unrecognised');
+            break;
+        }
+
+        $apiUrl = $this->getEndpoint($url);
+        $apiData = $this->apiGet($apiUrl);
+        return $this->decode($apiData);
+    }
+
+    public function getXuid($gamertag)
+    {
+        $apiUrl = $this->getEndpoint('xuid/'.$gamertag);
+        return $this->apiGet($apiUrl);
+    }
+
+    /*
+        Private Functions
+    */
 
     private function getEndpoint($name)
     {

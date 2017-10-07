@@ -31,14 +31,5 @@ class IGADTest extends \PHPUnit_Framework_TestCase
     {
         $id = 7041;
         $response = $this->igad->getAccountXuid();
-        echo 'aaaaaaaaaaaaaaaaaaaaaa';
-        echo print_r($response, 1);
-        echo 'bbbbbbbbbbbbbbbbbbbbbbbbb';
-        /*
-        $this->assertEquals($id, $response->id);
-        $this->assertNotNull('response');
-        $this->assertObjectHasAttribute('name', $response);
-        $this->assertObjectHasAttribute('slug', $response);
-        $this->assertObjectHasAttribute('url', $response);*/
     }
 }
