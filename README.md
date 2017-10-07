@@ -1,5 +1,67 @@
-#This provides an easy wrapper for the https://xboxapi.com/ Xbox Achievements API
+IGAD (Internet Game Award Database)
+=========
 
-The author is not affiliated with Microsoft in any way and has never worked for them. 
+## Introduction
 
-Xboxapi.com is an unofficial API of the Xbox LIVE Service, it is in no way endorsed or affiliated to the Microsoft Corporation, Xbox, Xbox LIVE and any Xbox images are registered trademarks of their respected owners.
+
+## Installation
+
+Add `andach/igad` to your `composer.json`.
+```
+"andach/igad": "~1.0"
+```
+or 
+```bash
+composer require andach/igad
+```
+
+Run `composer update` to pull down the latest version of the package.
+
+Now open up `app/config/app.php` and add the service provider to your `providers` array.
+
+```php
+'providers' => array(
+    Andach\IGAD\IGADServiceProvider::class,
+)
+```
+
+Optionally, add the facade to your `aliases` array
+```php
+'IGAD' => \Andach\IGAD\Facades\IGAD::class,
+```
+
+## Configuration
+
+Add the `IGAD` to your `config/services.php` array
+```php
+'IGAD' => [
+    'key' => 'YOUR_IGAD_KEY'
+]
+```
+
+## Usage
+
+```php
+// TODO
+
+```
+
+## Format of returned data
+
+The returned JSON data is decoded as a PHP object.
+
+## Run Unit Test
+
+If you have PHPUnit installed in your environment, run:
+
+```bash
+$ phpunit
+```
+
+
+## Credits
+
+
+
+## License
+
