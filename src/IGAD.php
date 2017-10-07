@@ -53,14 +53,14 @@ class IGAD
     {
         $apiUrl = $this->getEndpoint('accountXuid');
         $apiData = $this->apiGet($apiUrl);
-        return $this->decodeSingle($apiData);
+        return $this->decode($apiData);
     }
 
     public function getAchievements($xuid, $titleid)
     {
         $apiUrl = $this->getEndpoint($xuid.'/achievements/'.$titleid);
         $apiData = $this->apiGet($apiUrl);
-        return $this->decodeSingle($apiData);
+        return $this->decode($apiData);
     }
     
     public function getProfile($xuid = '')
@@ -73,57 +73,20 @@ class IGAD
         }
         
         $apiData = $this->apiGet($apiUrl);
-        return $this->decodeSingle($apiData);
+        return $this->decode($apiData);
     }
 
-    /*
-     *  Internally used Methods, set visibility to public to enable more flexibility
-     */
-    /**
-     * @param $name
-     * @return mixed
-     */
     private function getEndpoint($name)
     {
         return 'https://xboxapi.com/v2/'.$name;
     }
     
-    private function decodeSingle(&$apiData)
+    private function decode(&$apiData)
     {
         $resObj = json_decode($apiData);
-        if (isset($resObj->status)) {
-            $msg = "Error " . $resObj->status . " " . $resObj->message;
-            throw new \Exception($msg);
-        }
-        if (!is_array($resObj) || count($resObj) == 0) {
-            return false;
-        }
         return $resObj[0];
     }
     
-    private function decodeMultiple(&$apiData)
-    {
-        $resObj = json_decode($apiData);
-        if (isset($resObj->status)) {
-            $msg = "Error " . $resObj->status . " " . $resObj->message;
-            throw new \Exception($msg);
-        } else {
-            //$itemsArray = $resObj->items;
-            if (!is_array($resObj)) {
-                return false;
-            } else {
-                return $resObj;
-            }
-        }
-    }
-    /**
-     * Using CURL to issue a GET request
-     *
-     * @param $url
-     * @param $params
-     * @return mixed
-     * @throws \Exception
-     */
     private function apiGet($url, $params = array())
     {
         $url = $url . (strpos($url, '?') === false ? '?' : '') . http_build_query($params);
@@ -142,6 +105,7 @@ class IGAD
         } catch (Exception $exception) {
             throw new \Exception($exception);
         }
+
         return $response->getBody();
     }
 }
