@@ -5,7 +5,7 @@
     "require": {},
     "autoload": {
         "psr-4": {
-            "andach\\igad\\": "src"
+            "andach\\igad\\": "src/"
         }
     },
     "require": {
