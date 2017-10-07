@@ -55,6 +55,13 @@ class IGAD
         $apiData = $this->apiGet($apiUrl);
         return $this->decodeSingle($apiData);
     }
+
+    public function getAchievements($xuid, $titleid)
+    {
+        $apiUrl = $this->getEndpoint($xuid.'/achievements/'.$titleid);
+        $apiData = $this->apiGet($apiUrl);
+        return $this->decodeSingle($apiData);
+    }
     
     public function getProfile($xuid = '')
     {

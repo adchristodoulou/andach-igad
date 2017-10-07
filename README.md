@@ -27,7 +27,7 @@ Now open up `app/config/app.php` and add the service provider to your `providers
 
 Optionally, add the facade to your `aliases` array
 ```php
-'IGAD' => \Andach\IGAD\IGAD::class,
+'IGAD' => \Andach\IGAD\Facades\IGAD::class,
 ```
 
 ## Configuration
