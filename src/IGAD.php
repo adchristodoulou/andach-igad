@@ -2,7 +2,7 @@
 namespace Andach\IGAD;
 use GuzzleHttp\Client;
 
-class IGDB
+class IGAD
 {
     /**
      * @var \GuzzleHttp\Client
@@ -74,14 +74,7 @@ class IGDB
     {
         return 'https://xboxapi.com/v2/'.$name;
     }
-    /**
-     * Decode the response from IGDB, extract the single resource object.
-     * (Don't use this to decode the response containing list of objects)
-     *
-     * @param  string $apiData the api response from IGDB
-     * @throws \Exception
-     * @return \StdClass  an IGDB resource object
-     */
+    
     private function decodeSingle(&$apiData)
     {
         $resObj = json_decode($apiData);
@@ -94,13 +87,7 @@ class IGDB
         }
         return $resObj[0];
     }
-    /**
-     * Decode the response from IGDB, extract the multiple resource object.
-     *
-     * @param  string $apiData the api response from IGDB
-     * @throws \Exception
-     * @return \StdClass  an IGDB resource object
-     */
+    
     private function decodeMultiple(&$apiData)
     {
         $resObj = json_decode($apiData);
