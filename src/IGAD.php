@@ -56,9 +56,15 @@ class IGAD
         return $this->decodeSingle($apiData);
     }
     
-    public function getProfile()
+    public function getProfile($xuid = '')
     {
-        $apiUrl = $this->getEndpoint('profile');
+        if ($xuid)
+        {
+            $apiUrl = $this->getEndpoint($xuid.'/profile');
+        } else {
+            $apiUrl = $this->getEndpoint('profile');
+        }
+        
         $apiData = $this->apiGet($apiUrl);
         return $this->decodeSingle($apiData);
     }
