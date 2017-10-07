@@ -124,7 +124,7 @@ class IGAD
      * @return mixed
      * @throws \Exception
      */
-    private function apiGet($url, $params)
+    private function apiGet($url, $params = array())
     {
         $url = $url . (strpos($url, '?') === false ? '?' : '') . http_build_query($params);
         try {
