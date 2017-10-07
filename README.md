@@ -35,7 +35,7 @@ Optionally, add the facade to your `aliases` array
 Add the `IGAD` to your `config/services.php` array
 ```php
 'IGAD' => [
-    'key' => 'YOUR_IGAD_KEY'
+    'xboxapikey' => 'YOUR_IGAD_KEY'
 ]
 ```
 
