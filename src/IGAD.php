@@ -83,7 +83,7 @@ class IGAD
     
     private function decode(&$apiData)
     {
-        $resObj = json_decode($apiData, true);
+        $resObj = json_decode($apiData, true, 512, JSON_BIGINT_AS_STRING);
         return $resObj;
     }
     
