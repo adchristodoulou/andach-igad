@@ -84,7 +84,7 @@ class IGAD
     private function decode(&$apiData)
     {
         $resObj = json_decode($apiData);
-        return $resObj[0];
+        return $resObj;
     }
     
     private function apiGet($url, $params = array())
