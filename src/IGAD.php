@@ -60,7 +60,24 @@ class IGAD
     {
         $apiUrl = $this->getEndpoint($xuid.'/achievements/'.$titleid);
         $apiData = $this->apiGet($apiUrl);
-        return $this->decode($apiData);
+        
+        $data = $this->decode($apiData);
+        
+        foreach ($data as $ach)
+        {
+            $array = array();
+
+            $array['gamerscore'] = $ach['rewards'][0]['value'];
+            $array['achievement_description'] = $ach['description'];
+            $array['achievement_locked_description'] = $ach['locked_description'];
+            $array['is_secret'] = $ach['isSecret'];
+            $array['is_rare'] = $ach['rarity'] ? 1, 0;
+            $array['percentage_unlocked'] = $ach['rarity']['currentPercentage'];
+
+            $return[] = $array[];
+        }
+
+        return $return;
     }
 
     public function getConversations()
