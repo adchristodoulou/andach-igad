@@ -40,12 +40,19 @@ class IGAD
      *
      * @throws \Exception
      */
-    public function __construct($xboxapikey)
+    public function __construct($xboxapikey, $xuid = '')
     {
-        if (!is_string($xboxapikey) || empty($xboxapikey)) {
+        if (!is_string($xboxapikey) || empty($xboxapikey)) 
+        {
             throw new \Exception('IGAD Xbox API key is required');
         }
+        if (!is_string($xuid))
+        {
+            throw new \Exception('IGAD Xuid must be cast to a string before being submitted to the class.');
+        }
+
         $this->xboxapikey = $xboxapikey;
+        $this->xuid = $xuid;
         $this->httpClient = new Client();
     }
     
@@ -56,35 +63,77 @@ class IGAD
         return $this->decode($apiData);
     }
 
-    public function getAchievements($xuid, $titleid)
+    public function getAchievements($titleid, $xuid = '')
     {
+        if (!$xuid)
+        {
+            if (!$this->xuid)
+            {
+                throw new \Exception('No Xuid passed to getAchievements or stored in class.');
+            }
+            $xuid = $this->xuid;
+        }
+        if (!is_string($xuid))
+        {
+            throw new \Exception('IGAD Xuid must be cast to a string before being submitted to getAchievements.');
+        }
+
+        $xuid = (string) $xuid;
+        $titleid = (string) $titleid;
+
+        if (strlen($titleid) == 8)
+        {
+            $type = 'xboxone';
+        } else {
+            $type = 'xbox360';
+        }
+
         $apiUrl = $this->getEndpoint($xuid.'/achievements/'.$titleid);
         $apiData = $this->apiGet($apiUrl);
         
         $data = $this->decode($apiData);
         
-        foreach ($data as $ach)
+        if ($type == 'xboxone')
         {
-            $array = array();
+            foreach ($data as $ach)
+            {
+                $array = array();
 
-            $array['gamerscore'] = $ach['rewards'][0]['value'];
-            $array['achievement_description'] = $ach['description'];
-            $array['achievement_locked_description'] = $ach['locked_description'];
-            $array['is_secret'] = $ach['isSecret'];
-            $array['is_rare'] = $ach['rarity'] ? 1, 0;
-            $array['percentage_unlocked'] = $ach['rarity']['currentPercentage'];
+                $array['name'] = $ach['name'];
+                $array['gamerscore'] = $ach['rewards'][0]['value'];
+                $array['achievement_description'] = $ach['description'];
+                $array['achievement_locked_description'] = $ach['locked_description'];
+                $array['is_secret'] = $ach['isSecret'];
+                $array['is_rare'] = $ach['rarity'] ? 1: 0;
+                $array['percentage_unlocked'] = $ach['rarity']['currentPercentage'];
+                $array['image'] = $ach['mediaAssets'][0]['url'];
+                $array['type'] = $type;
 
-            $return[] = $array[];
+                $return[] = $array;
+            }
+
+            return $return;
+        } else {
+            foreach ($data as $ach)
+            {
+                $array = array();
+
+                $array['name'] = $ach['name'];
+                $array['gamerscore'] = $ach['gamerscore'];
+                $array['achievement_description'] = $ach['description'];
+                $array['achievement_locked_description'] = $ach['lockedDescription'];
+                $array['is_secret'] = $ach['isSecret'];
+                $array['is_rare'] = false;
+                $array['percentage_unlocked'] = 0;
+                $array['image'] = $ach['imageUnlocked'];
+                $array['type'] = $type;
+
+                $return[] = $array;
+            }
+
+            return $return;
         }
-
-        return $return;
-    }
-
-    public function getConversations()
-    {
-        $apiUrl = $this->getEndpoint('conversations');
-        $apiData = $this->apiGet($apiUrl);
-        return $this->decode($apiData);
+        
     }
 
     public function getGameDetails($titleid)
@@ -97,25 +146,34 @@ class IGAD
     public function getGamertag($xuid)
     {
         $apiUrl = $this->getEndpoint('gamertag/'.$xuid);
-        return $this->apiGet($apiUrl);
+        $apiData = $this->apiGet($apiUrl);
+        return $this->decode($apiData)['gamertag'];
     }
 
-    public function getMessages()
+    public function getMyConversations()
+    {
+        $apiUrl = $this->getEndpoint('conversations');
+        $apiData = $this->apiGet($apiUrl);
+        return $this->decode($apiData);
+    }
+
+    public function getMyMessages()
     {
         $apiUrl = $this->getEndpoint('messages');
         $apiData = $this->apiGet($apiUrl);
         return $this->decode($apiData);
     }
     
-    public function getMyProfile($xuid = '')
+    public function getMyProfile()
     {
-        if ($xuid)
-        {
-            $apiUrl = $this->getEndpoint($xuid.'/profile');
-        } else {
-            $apiUrl = $this->getEndpoint('profile');
-        }
-        
+        $apiUrl = $this->getEndpoint('profile');
+        $apiData = $this->apiGet($apiUrl);
+        return $this->decode($apiData);
+    }
+    
+    public function getProfile($xuid)
+    {
+        $apiUrl = $this->getEndpoint($xuid.'/profile');
         $apiData = $this->apiGet($apiUrl);
         return $this->decode($apiData);
     }
@@ -151,7 +209,8 @@ class IGAD
     public function getXuid($gamertag)
     {
         $apiUrl = $this->getEndpoint('xuid/'.$gamertag);
-        return $this->apiGet($apiUrl);
+        $apiData = $this->apiGet($apiUrl);
+        return $this->decode($apiData)['xuid'];
     }
 
     /*
