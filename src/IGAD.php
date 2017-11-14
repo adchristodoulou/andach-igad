@@ -81,7 +81,7 @@ class IGAD
         $xuid = (string) $xuid;
         $titleid = (string) $titleid;
 
-        if (strlen($titleid) == 8)
+        if (strlen($titleid) <= 9)
         {
             $type = 'xboxone';
         } else {
