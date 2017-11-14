@@ -106,7 +106,7 @@ class IGAD
                     $date_of_earning = null;
                 }
 
-                $array['third_party_id'] = $ach['serviceConfigId'];
+                $array['third_party_id'] = $titleid.'-'.$ach['id'];
                 $array['name'] = $ach['name'];
                 $array['gamerscore'] = $ach['rewards'][0]['value'];
                 $array['achievement_description'] = $ach['description'];
