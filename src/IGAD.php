@@ -63,7 +63,7 @@ class IGAD
         return $this->decode($apiData);
     }
 
-    public function getAchievements($titleid, $xuid = '')
+    public function getAchievements($titleid, $type, $xuid = '')
     {
         if (!$xuid)
         {
@@ -81,19 +81,12 @@ class IGAD
         $xuid = (string) $xuid;
         $titleid = (string) $titleid;
 
-        if (strlen($titleid) <= 9)
-        {
-            $type = 'xboxone';
-        } else {
-            $type = 'xbox360';
-        }
-
         $apiUrl = $this->getEndpoint($xuid.'/achievements/'.$titleid);
         $apiData = $this->apiGet($apiUrl);
         
         $data = $this->decode($apiData);
         
-        if ($type == 'xboxone')
+        if ($type == 'xbox-one')
         {
             foreach ($data as $ach)
             {
@@ -148,7 +141,7 @@ class IGAD
             }
 
             return $return;
-        } else {
+        } else if ($type == 'xbox-360') {
             foreach ($data as $ach)
             {
                 $array = array();
@@ -170,6 +163,8 @@ class IGAD
             }
 
             return $return;
+        } else {
+            throw new \Exception('$type (of console) incorrectly specified. It must be "xbox-one" or "xbox-360"');
         }
         
     }
