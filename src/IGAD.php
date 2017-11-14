@@ -99,12 +99,19 @@ class IGAD
             {
                 $array = array();
 
+                if ($ach['rarity']['currentCategory'] == 'Rare')
+                {
+                    $rare = 1;
+                } else {
+                    $rare = 0;
+                }
+
                 $array['name'] = $ach['name'];
                 $array['gamerscore'] = $ach['rewards'][0]['value'];
                 $array['achievement_description'] = $ach['description'];
-                $array['achievement_locked_description'] = $ach['locked_description'];
+                $array['achievement_locked_description'] = $ach['lockedDescription'];
                 $array['is_secret'] = $ach['isSecret'];
-                $array['is_rare'] = $ach['rarity'] ? 1: 0;
+                $array['is_rare'] = $rare;
                 $array['percentage_unlocked'] = $ach['rarity']['currentPercentage'];
                 $array['image'] = $ach['mediaAssets'][0]['url'];
                 $array['type'] = $type;
