@@ -106,6 +106,14 @@ class IGAD
                     $rare = 0;
                 }
 
+                if ($ach['progressState'] == 'Achieved')
+                {
+                    $date_of_earning = $ach['progression']['timeUnlocked'];
+                } else {
+                    $date_of_earning = null;
+                }
+
+                $array['third_party_id'] = $ach['serviceConfigId'];
                 $array['name'] = $ach['name'];
                 $array['gamerscore'] = $ach['rewards'][0]['value'];
                 $array['achievement_description'] = $ach['description'];
@@ -115,6 +123,26 @@ class IGAD
                 $array['percentage_unlocked'] = $ach['rarity']['currentPercentage'];
                 $array['image'] = $ach['mediaAssets'][0]['url'];
                 $array['type'] = $type;
+                $array['date_of_earning'] = date('Y-m-d h:i:s', strtotime($date_of_earning));
+                $array['requirements'] = array();
+
+                if (isset($ach['progression']['requirements']))
+                {
+                    foreach ($ach['progression']['requirements'] as $req)
+                    {
+                        $reqArray = array();
+
+                        $reqArray['microsoft_guid'] = $req['id'];
+                        $reqArray['operation_type'] = $req['operationType'];
+                        $reqArray['value_type'] = $req['valueType'];
+                        $reqArray['target'] = $req['target'];
+                        $reqArray['rule_participation_type'] = $req['ruleParticipationType'];
+                        $reqArray['value'] = $req['current'];
+
+                        $array['requirements'][] = $reqArray;
+                    }
+                }
+                
 
                 $return[] = $array;
             }
@@ -125,6 +153,7 @@ class IGAD
             {
                 $array = array();
 
+                $array['third_party_id'] = $ach['titleId'].'-'.$ach['id'];
                 $array['name'] = $ach['name'];
                 $array['gamerscore'] = $ach['gamerscore'];
                 $array['achievement_description'] = $ach['description'];
@@ -134,6 +163,8 @@ class IGAD
                 $array['percentage_unlocked'] = 0;
                 $array['image'] = $ach['imageUnlocked'];
                 $array['type'] = $type;
+                $array['date_of_earning'] = date('Y-m-d h:i:s', strtotime($ach['timeUnlocked']));
+                $array['requirements'] = array();
 
                 $return[] = $array;
             }

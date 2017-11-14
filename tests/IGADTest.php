@@ -44,7 +44,7 @@ class IGADTest extends \PHPUnit_Framework_TestCase
     }
 
     /** @test */
-    public function get_xboxone_achievements()
+    public function get_xboxone_achievements_8char()
     {
         //Major Nelson's achievements for Oxenfree
         $response = $this->igad->getAchievements(35717019, '2584878536129841');
@@ -58,6 +58,25 @@ class IGADTest extends \PHPUnit_Framework_TestCase
         $this->assertNotNull($ach['gamerscore']);
         $this->assertNotNull($ach['achievement_description']);
         $this->assertNotNull($ach['name']);
+        $this->assertEquals(1, count($ach['requirements']));
+    }
+
+    /** @test */
+    public function get_xboxone_achievements_9char()
+    {
+        //Major Nelson's achievements for Rare Replay
+        $response = $this->igad->getAchievements(515050978, '2533274912189019');
+
+        $this->assertNotNull($response);
+
+        $this->assertEquals(200, count($response));
+
+        $ach = $response[6];
+
+        $this->assertNotNull($ach['gamerscore']);
+        $this->assertNotNull($ach['achievement_description']);
+        $this->assertNotNull($ach['name']);
+        $this->assertEquals(5, count($ach['requirements']));
     }
 
     /** @test */
@@ -75,5 +94,6 @@ class IGADTest extends \PHPUnit_Framework_TestCase
         $this->assertNotNull($ach['gamerscore']);
         $this->assertNotNull($ach['achievement_description']);
         $this->assertNotNull($ach['name']);
+        $this->assertEquals(0, count($ach['requirements']));
     }
 }
